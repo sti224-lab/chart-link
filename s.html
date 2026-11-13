@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>증권플러스로 열기</title>
+<style>
+body{font-family:system-ui,sans-serif;text-align:center;padding:48px 16px;background:#fff;color:#111}
+a.btn{display:inline-block;margin-top:20px;padding:14px 28px;background:#2f6bff;color:#fff;border-radius:10px;text-decoration:none;font-size:18px}
+p{color:#666}
+</style>
+</head>
+<body>
+<h2 id="t">증권플러스로 여는 중…</h2>
+<p id="m"></p>
+<a class="btn" id="b" href="#" style="display:none">증권플러스에서 열기</a>
+<script>
+(function () {
+  var code = (new URLSearchParams(location.search).get("code") || "").toUpperCase();
+  if (!/^[0-9A-Z]{6}$/.test(code)) {
+    document.getElementById("t").textContent = "종목코드가 올바르지 않습니다";
+    document.getElementById("m").textContent = "주소 끝이 ?code=005930 형태여야 합니다.";
+    return;
+  }
+  var path = "viewStock?code=A" + code;
+  var isAndroid = /android/i.test(navigator.userAgent);
+  var url = isAndroid
+    ? "intent://" + path + "#Intent;scheme=stockplus;package=com.dunamu.stockplus;end"
+    : "stockplus://" + path;
+  var b = document.getElementById("b");
+  b.href = url;
+  b.style.display = "inline-block";
+  document.getElementById("m").textContent = "종목코드 " + code + " · 자동으로 안 열리면 아래 버튼을 누르세요.";
+  setTimeout(function () { location.href = url; }, 300);
+})();
+</script>
+</body>
+</html>
